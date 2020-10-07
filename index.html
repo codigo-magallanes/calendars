@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendars</title>
+    <style>
+        nav {
+            margin: 0;
+            padding: 0;
+            width: 10%;
+            background-color: #f1f1f1;
+            height: 100%;
+            /* Full height */
+            position: fixed;
+            /* Make it stick, even on scroll */
+            overflow: auto;
+            /* Enable scrolling if the sidenav has too much content */
+        }
+        label {
+            display: block;
+            width: 100%;
+            color: white;
+            background-color: #4CAF50;
+            font-weight: bolder;
+            font-size: x-large;
+            padding: 0.2rem 0.6rem;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 120px;
+            background-color: #f1f1f1;
+        }
+
+        li a {
+            display: block;
+            color: #000;
+            width: 100%;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+        /* Change the link color on hover */
+        li a:hover {
+            background-color: #555;
+            color: white;
+        }
+
+        .active {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <label for="mes">Meses</label>
+        <ul name="mes">
+            <li><a href="./month/index.html">Nuevo mes</a></li>
+            <li><a href="./month/original.html">Original</a></li>
+            <li><a href="./month/mod.html">Modificación</a></li>
+        </ul>
+        <label for="años">Años</label>
+        <ul name="años">
+            <li><a href="./year/index.html">Año</a></li>
+            <li><a href="./year/calendario.html">Calendario</a></li>
+        </ul>
+    </nav>
+</body>
+
+</html>

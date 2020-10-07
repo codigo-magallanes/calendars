@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .dia {
+        position: relative;
+        border-bottom: 1px dotted black;
+      }
+      .dia-1 {
+        background-color: yellow;
+      }
+      .dia-5 {
+        background-color: yellowgreen;
+      }
+      .llena {
+        background-color: black;
+        color: white;
+      }
+      .newMoon {
+        background-color: grey;
+      }
+
+      /* Tooltip text */
+      .dia .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        top: 0px;
+        z-index: 1;
+      }
+
+      /* Show the tooltip text when you mouse over the tooltip container */
+      .dia:hover .tooltiptext {
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="albor"></div>
+    <div id="zero"></div>
+    <div id="test"></div>
+    <div id="mes"></div>
+    <div id="diasAño"></div>
+
+    <script>
+      // recuperar datos de firebase:
+      const firebase = [
+        {
+          distancia: 404404,
+          fase: "Cuarto creciente",
+          fechaNE: 1578030412000,
+          date: "2020-01-03T05:46:52.000Z",
+        },
+        {
+          distancia: 375375,
+          fase: "Luna llena",
+          fechaNE: 1578687794000,
+          date: "2020-01-10T20:23:14.000Z",
+        },
+        {
+          distancia: 365365,
+          fase: "Cuarto menguante",
+          fechaNE: 1579269635000,
+          date: "2020-01-17T14:00:35.000Z",
+        },
+        {
+          distancia: 395395,
+          fase: "Luna nueva",
+          fechaNE: 1579905851000,
+          date: "2020-01-24T22:44:11.000Z",
+        },
+        {
+          distancia: 399399,
+          fase: "Cuarto creciente",
+          fechaNE: 1580611408000,
+          date: "2020-02-02T02:43:28.000Z",
+        },
+        {
+          distancia: 368368,
+          fase: "Luna llena",
+          fechaNE: 1581237275000,
+          date: "2020-02-09T08:34:35.000Z",
+        },
+        {
+          distancia: 371371,
+          fase: "Cuarto menguante",
+          fechaNE: 1581808749000,
+          date: "2020-02-15T23:19:09.000Z",
+        },
+        {
+          distancia: 402402,
+          fase: "Luna nueva",
+          fechaNE: 1582475624000,
+          date: "2020-02-23T16:33:44.000Z",
+        },
+        {
+          distancia: 391391,
+          fase: "Cuarto creciente",
+          fechaNE: 1583182718000,
+          date: "2020-03-02T20:58:38.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Luna llena",
+          fechaNE: 1583779715000,
+          date: "2020-03-09T18:48:35.000Z",
+        },
+        {
+          distancia: 379379,
+          fase: "Cuarto menguante",
+          fechaNE: 1584354939000,
+          date: "2020-03-16T10:35:39.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Luna nueva",
+          fechaNE: 1585045776000,
+          date: "2020-03-24T10:29:36.000Z",
+        },
+        {
+          distancia: 381381,
+          fase: "Cuarto creciente",
+          fechaNE: 1585743712000,
+          date: "2020-04-01T12:21:52.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Luna llena",
+          fechaNE: 1586320536000,
+          date: "2020-04-08T04:35:36.000Z",
+        },
+        {
+          distancia: 389389,
+          fase: "Cuarto menguante",
+          fechaNE: 1586912217000,
+          date: "2020-04-15T00:56:57.000Z",
+        },
+        {
+          distancia: 403403,
+          fase: "Luna nueva",
+          fechaNE: 1587616020000,
+          date: "2020-04-23T04:27:00.000Z",
+        },
+        {
+          distancia: 372372,
+          fase: "Cuarto creciente",
+          fechaNE: 1588286324000,
+          date: "2020-04-30T22:38:44.000Z",
+        },
+        {
+          distancia: 366366,
+          fase: "Luna llena",
+          fechaNE: 1588855535000,
+          date: "2020-05-07T12:45:35.000Z",
+        },
+        {
+          distancia: 397397,
+          fase: "Cuarto menguante",
+          fechaNE: 1589472198000,
+          date: "2020-05-14T16:03:18.000Z",
+        },
+        {
+          distancia: 397397,
+          fase: "Luna nueva",
+          fechaNE: 1590176389000,
+          date: "2020-05-22T19:39:49.000Z",
+        },
+        {
+          distancia: 366366,
+          fase: "Cuarto creciente",
+          fechaNE: 1590816622000,
+          date: "2020-05-30T05:30:22.000Z",
+        },
+        {
+          distancia: 373373,
+          fase: "Luna llena",
+          fechaNE: 1591391563000,
+          date: "2020-06-05T21:12:43.000Z",
+        },
+        {
+          distancia: 403403,
+          fase: "Cuarto menguante",
+          fechaNE: 1592036699000,
+          date: "2020-06-13T08:24:59.000Z",
+        },
+        {
+          distancia: 389389,
+          fase: "Luna nueva",
+          fechaNE: 1592728936000,
+          date: "2020-06-21T08:42:16.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Cuarto creciente",
+          fechaNE: 1593339390000,
+          date: "2020-06-28T10:16:30.000Z",
+        },
+        {
+          distancia: 381381,
+          fase: "Luna llena",
+          fechaNE: 1593931497000,
+          date: "2020-07-05T06:44:57.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Cuarto menguante",
+          fechaNE: 1594603888000,
+          date: "2020-07-13T01:31:28.000Z",
+        },
+        {
+          distancia: 379379,
+          fase: "Luna nueva",
+          fechaNE: 1595273616000,
+          date: "2020-07-20T19:33:36.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Cuarto creciente",
+          fechaNE: 1595860427000,
+          date: "2020-07-27T14:33:47.000Z",
+        },
+        {
+          distancia: 390390,
+          fase: "Luna llena",
+          fechaNE: 1596477578000,
+          date: "2020-08-03T17:59:38.000Z",
+        },
+        {
+          distancia: 402402,
+          fase: "Cuarto menguante",
+          fechaNE: 1597171668000,
+          date: "2020-08-11T18:47:48.000Z",
+        },
+        {
+          distancia: 371371,
+          fase: "Luna nueva",
+          fechaNE: 1597812135000,
+          date: "2020-08-19T04:42:15.000Z",
+        },
+        {
+          distancia: 367367,
+          fase: "Cuarto creciente",
+          fechaNE: 1598385551000,
+          date: "2020-08-25T19:59:11.000Z",
+        },
+        {
+          distancia: 399399,
+          fase: "Luna llena",
+          fechaNE: 1599031392000,
+          date: "2020-09-02T07:23:12.000Z",
+        },
+        {
+          distancia: 396396,
+          fase: "Cuarto menguante",
+          fechaNE: 1599737298000,
+          date: "2020-09-10T11:28:18.000Z",
+        },
+        {
+          distancia: 365365,
+          fase: "Luna nueva",
+          fechaNE: 1600347659000,
+          date: "2020-09-17T13:00:59.000Z",
+        },
+        {
+          distancia: 374374,
+          fase: "Cuarto creciente",
+          fechaNE: 1600919794000,
+          date: "2020-09-24T03:56:34.000Z",
+        },
+        {
+          distancia: 404404,
+          fase: "Luna llena",
+          fechaNE: 1601593615000,
+          date: "2020-10-01T23:06:55.000Z",
+        },
+        {
+          distancia: 387387,
+          fase: "Cuarto menguante",
+          fechaNE: 1602297684000,
+          date: "2020-10-10T02:41:24.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Luna nueva",
+          fechaNE: 1602883934000,
+          date: "2020-10-16T21:32:14.000Z",
+        },
+        {
+          distancia: 383383,
+          fase: "Cuarto creciente",
+          fechaNE: 1603466657000,
+          date: "2020-10-23T15:24:17.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Luna llena",
+          fechaNE: 1604159489000,
+          date: "2020-10-31T15:51:29.000Z",
+        },
+        {
+          distancia: 377377,
+          fase: "Cuarto menguante",
+          fechaNE: 1604846858000,
+          date: "2020-11-08T14:47:38.000Z",
+        },
+        {
+          distancia: 364364,
+          fase: "Luna nueva",
+          fechaNE: 1605420534000,
+          date: "2020-11-15T06:08:54.000Z",
+        },
+        {
+          distancia: 393393,
+          fase: "Cuarto creciente",
+          fechaNE: 1606023954000,
+          date: "2020-11-22T05:45:54.000Z",
+        },
+        {
+          distancia: 401401,
+          fase: "Luna llena",
+          fechaNE: 1606732324000,
+          date: "2020-11-30T10:32:04.000Z",
+        },
+        {
+          distancia: 369369,
+          fase: "Cuarto menguante",
+          fechaNE: 1607391479000,
+          date: "2020-12-08T01:37:59.000Z",
+        },
+        {
+          distancia: 369369,
+          fase: "Luna nueva",
+          fechaNE: 1607966325000,
+          date: "2020-12-14T17:18:45.000Z",
+        },
+        {
+          distancia: 401401,
+          fase: "Cuarto creciente",
+          fechaNE: 1608597751000,
+          date: "2020-12-22T00:42:31.000Z",
+        },
+        {
+          distancia: 393393,
+          fase: "Luna llena",
+          fechaNE: 1609302624000,
+          date: "2020-12-30T04:30:24.000Z",
+        },
+      ];
+      const firebase2021 = [
+        {
+          distancia: 369369,
+          fase: "Luna nueva",
+          fechaNE: 1607966325000,
+          date: "2020-12-14T17:18:45.000Z",
+        },
+        {
+          distancia: 401401,
+          fase: "Cuarto creciente",
+          fechaNE: 1608597751000,
+          date: "2020-12-22T00:42:31.000Z",
+        },
+        {
+          distancia: 393393,
+          fase: "Luna llena",
+          fechaNE: 1609302624000,
+          date: "2020-12-30T04:30:24.000Z",
+        },
+        {
+          distancia: 364364,
+          fase: "Cuarto menguante",
+          fechaNE: 1609929515000,
+          date: "2021-01-06T10:38:35.000Z",
+        },
+        {
+          distancia: 377377,
+          fase: "Luna nueva",
+          fechaNE: 1610517757000,
+          date: "2021-01-13T06:02:37.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Cuarto creciente",
+          fechaNE: 1611180215000,
+          date: "2021-01-20T22:03:35.000Z",
+        },
+        {
+          distancia: 383383,
+          fase: "Luna llena",
+          fechaNE: 1611865115000,
+          date: "2021-01-28T20:18:35.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Cuarto menguante",
+          fechaNE: 1612463922000,
+          date: "2021-02-04T18:38:42.000Z",
+        },
+        {
+          distancia: 387387,
+          fase: "Luna nueva",
+          fechaNE: 1613074091000,
+          date: "2021-02-11T20:08:11.000Z",
+        },
+        {
+          distancia: 404404,
+          fase: "Cuarto creciente",
+          fechaNE: 1613764146000,
+          date: "2021-02-19T19:49:06.000Z",
+        },
+        {
+          distancia: 374374,
+          fase: "Luna llena",
+          fechaNE: 1614417576000,
+          date: "2021-02-27T09:19:36.000Z",
+        },
+        {
+          distancia: 365365,
+          fase: "Cuarto menguante",
+          fechaNE: 1614997920000,
+          date: "2021-03-06T02:32:00.000Z",
+        },
+        {
+          distancia: 396396,
+          fase: "Luna nueva",
+          fechaNE: 1615634612000,
+          date: "2021-03-13T11:23:32.000Z",
+        },
+        {
+          distancia: 398398,
+          fase: "Cuarto creciente",
+          fechaNE: 1616341306000,
+          date: "2021-03-21T15:41:46.000Z",
+        },
+        {
+          distancia: 367367,
+          fase: "Luna llena",
+          fechaNE: 1616964604000,
+          date: "2021-03-28T20:50:04.000Z",
+        },
+        {
+          distancia: 371371,
+          fase: "Cuarto menguante",
+          fechaNE: 1617537852000,
+          date: "2021-04-04T12:04:12.000Z",
+        },
+        {
+          distancia: 402402,
+          fase: "Luna nueva",
+          fechaNE: 1618201976000,
+          date: "2021-04-12T04:32:56.000Z",
+        },
+        {
+          distancia: 390390,
+          fase: "Cuarto creciente",
+          fechaNE: 1618909201000,
+          date: "2021-04-20T09:00:01.000Z",
+        },
+        {
+          distancia: 380380,
+          fase: "Cuarto menguante",
+          fechaNE: 1620078703000,
+          date: "2021-05-03T21:51:43.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Luna nueva",
+          fechaNE: 1620766893000,
+          date: "2021-05-11T21:01:33.000Z",
+        },
+        {
+          distancia: 381381,
+          fase: "Cuarto creciente",
+          fechaNE: 1621458793000,
+          date: "2021-05-19T21:13:13.000Z",
+        },
+        {
+          distancia: 389389,
+          fase: "Cuarto menguante",
+          fechaNE: 1622625964000,
+          date: "2021-06-02T09:26:04.000Z",
+        },
+        {
+          distancia: 403403,
+          fase: "Luna nueva",
+          fechaNE: 1623329645000,
+          date: "2021-06-10T12:54:05.000Z",
+        },
+        {
+          distancia: 372372,
+          fase: "Cuarto creciente",
+          fechaNE: 1623995684000,
+          date: "2021-06-18T05:54:44.000Z",
+        },
+        {
+          distancia: 366366,
+          fase: "Luna llena",
+          fechaNE: 1624567214000,
+          date: "2021-06-24T20:40:14.000Z",
+        },
+        {
+          distancia: 397397,
+          fase: "Cuarto menguante",
+          fechaNE: 1625181159000,
+          date: "2021-07-01T23:12:39.000Z",
+        },
+        {
+          distancia: 397397,
+          fase: "Luna nueva",
+          fechaNE: 1625887063000,
+          date: "2021-07-10T03:17:43.000Z",
+        },
+        {
+          distancia: 366366,
+          fase: "Cuarto creciente",
+          fechaNE: 1626523897000,
+          date: "2021-07-17T12:11:37.000Z",
+        },
+        {
+          distancia: 373373,
+          fase: "Luna llena",
+          fechaNE: 1627101447000,
+          date: "2021-07-24T04:37:27.000Z",
+        },
+        {
+          distancia: 403403,
+          fase: "Cuarto menguante",
+          fechaNE: 1627744696000,
+          date: "2021-07-31T15:18:16.000Z",
+        },
+        {
+          distancia: 389389,
+          fase: "Luna nueva",
+          fechaNE: 1628437846000,
+          date: "2021-08-08T15:50:46.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Cuarto creciente",
+          fechaNE: 1629048064000,
+          date: "2021-08-15T17:21:04.000Z",
+        },
+        {
+          distancia: 381381,
+          fase: "Luna llena",
+          fechaNE: 1629640935000,
+          date: "2021-08-22T14:02:15.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Cuarto menguante",
+          fechaNE: 1630314902000,
+          date: "2021-08-30T09:15:02.000Z",
+        },
+        {
+          distancia: 379379,
+          fase: "Luna nueva",
+          fechaNE: 1630983121000,
+          date: "2021-09-07T02:52:01.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Cuarto creciente",
+          fechaNE: 1631572880000,
+          date: "2021-09-13T22:41:20.000Z",
+        },
+        {
+          distancia: 391391,
+          fase: "Luna llena",
+          fechaNE: 1632189284000,
+          date: "2021-09-21T01:54:44.000Z",
+        },
+        {
+          distancia: 402402,
+          fase: "Cuarto menguante",
+          fechaNE: 1632887904000,
+          date: "2021-09-29T03:58:24.000Z",
+        },
+        {
+          distancia: 371371,
+          fase: "Luna nueva",
+          fechaNE: 1633525544000,
+          date: "2021-10-06T13:05:44.000Z",
+        },
+        {
+          distancia: 367367,
+          fase: "Cuarto creciente",
+          fechaNE: 1634102855000,
+          date: "2021-10-13T05:27:35.000Z",
+        },
+        {
+          distancia: 399399,
+          fase: "Luna llena",
+          fechaNE: 1634749061000,
+          date: "2021-10-20T16:57:41.000Z",
+        },
+        {
+          distancia: 395395,
+          fase: "Cuarto menguante",
+          fechaNE: 1635458804000,
+          date: "2021-10-28T22:06:44.000Z",
+        },
+        {
+          distancia: 365365,
+          fase: "Luna nueva",
+          fechaNE: 1636064126000,
+          date: "2021-11-04T22:15:26.000Z",
+        },
+        {
+          distancia: 375375,
+          fase: "Cuarto creciente",
+          fechaNE: 1636638502000,
+          date: "2021-11-11T13:48:22.000Z",
+        },
+        {
+          distancia: 404404,
+          fase: "Luna llena",
+          fechaNE: 1637315981000,
+          date: "2021-11-19T09:59:41.000Z",
+        },
+        {
+          distancia: 386386,
+          fase: "Cuarto menguante",
+          fechaNE: 1638019791000,
+          date: "2021-11-27T13:29:51.000Z",
+        },
+        {
+          distancia: 363363,
+          fase: "Luna nueva",
+          fechaNE: 1638607470000,
+          date: "2021-12-04T08:44:30.000Z",
+        },
+        {
+          distancia: 384384,
+          fase: "Cuarto creciente",
+          fechaNE: 1639190252000,
+          date: "2021-12-11T02:37:32.000Z",
+        },
+        {
+          distancia: 405405,
+          fase: "Luna llena",
+          fechaNE: 1639892278000,
+          date: "2021-12-19T05:37:58.000Z",
+        },
+        {
+          distancia: 376376,
+          fase: "Cuarto menguante",
+          fechaNE: 1640575560000,
+          date: "2021-12-27T03:26:00.000Z",
+        },
+      ];
+      // create array of abbreviated day names
+      const weekDay = [];
+      weekDay[0] = "Luna";
+      weekDay[1] = "Marte";
+      weekDay[2] = "Venus";
+      weekDay[3] = "Júpiter";
+      weekDay[4] = "Sol";
+
+      const diasXsemana = weekDay.length;
+
+      //let meses = new Array(13);
+      const mesesARRAY = [
+        "Capricornio",
+        "Acuario",
+        "Piscis",
+        "Aries",
+        "Tauro",
+        "Géminis",
+        "Cáncer",
+        "Leo",
+        "Virgo",
+        "Libra",
+        "Escorpio",
+        "Sagitario",
+        "Andrómeda",
+      ];
+
+      // Última luna nueva 2019 antes del equinocio
+      // 26/11/2019 15:07:41
+      // fuente: https://canaltrece.com.co/noticias/facebook-messenger-instagram-whatsapp-novedades/
+      // 2020: https://www.calendario-365.es/luna/lunar-fases.html
+
+      //   const albor = new Date("2019-11-26T15:07:41.000Z");
+      //   const datosLuna = firebase
+
+      const ejemplo2020 = {
+        albor: new Date("2019-11-26T15:07:41.000Z"),
+        datosLuna: firebase,
+        year: 2020,
+      };
+
+      // Última luna nueva 2020 antes del equinocio
+      // 2020-12-14T17:18:45.000Z
+      // fuente: https://canaltrece.com.co/noticias/facebook-messenger-instagram-whatsapp-novedades/
+      // 2020: https://www.calendario-365.es/luna/lunar-fases.html
+
+      //   const albor = new Date("2020-12-14T17:18:45.000Z");
+      //   const datosLuna = firebase2021
+
+      const ejemplo2021 = {
+        albor: new Date("2020-12-14T17:18:45.000Z"),
+        datosLuna: firebase2021,
+        year: 2021,
+      };
+
+      const { albor, datosLuna, year } = ejemplo2020;
+      const yearNSC = year - 2019
+
+
+      const monthDays = mesesARRAY.map((x, i) => {
+        return i % 2 === 0 ? 30 : 29;
+      });
+    //   monthDays[12] = 0
+    //   monthDays[0] = 30
+    //   monthDays[1] = 29
+    //   monthDays[2] = 30
+    //   monthDays[3] = 30
+    //   monthDays[4] = 29
+    //   monthDays[5] = 30
+    //   monthDays[6] = 29
+    //   monthDays[7] = 30
+    //   monthDays[8] = 29
+    //   monthDays[9] = 30
+    //   monthDays[10] = 29
+    //   monthDays[11] = 30
+
+      // CORRECCIONES POR ASIMETRÍA EN FASES LUNARES
+      if ( yearNSC % 2 != 0 ) monthDays[3] = 30
+      if ( yearNSC % 33 === 0 ) monthDays[2] = 30
+
+      const yearDays = monthDays.reduce((acc, v) => acc + v, 0)
+      newYearApprox = 365 - yearDays;
+
+      const elDias = document.querySelector('#diasAño')
+      elDias.innerHTML = newYearApprox
+
+      // Error cuando se produce cambio de hora
+      const addDay = (x, n) => {
+        return new Date(x.getTime() + 1000 * 60 * 60 * 24 * n);
+      };
+
+      const nextDay = (d) => {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+      };
+
+      const msToDateTime = (d) => {
+        let day = new Date(d);
+        let temp = `${day.toLocaleString("es-ES")}`;
+        return temp.split(" ");
+      };
+
+      let fullMoonArray = [];
+      let newMoonArray = [];
+
+      const zero = addDay(albor, 1);
+
+      datosLuna.forEach((l) => {
+        if (l.fase == "Luna llena") {
+          fullMoonArray.push(msToDateTime(l.fechaNE)[0]);
+        } else if (l.fase == "Luna nueva") {
+          newMoonArray.push(msToDateTime(l.fechaNE)[0]);
+        }
+      });
+
+      const imprimeFecha = (d, id, text) => {
+          const ms = d.getTime();
+          const el = document.querySelector(`#${id}`);
+          el.innerHTML = `${text}: ${ms}`;
+          return ms
+      }
+
+      imprimeFecha(new Date(), 'test', "Ahora (ms)")
+      imprimeFecha(albor, 'albor', "Albor (ms)")
+      imprimeFecha(zero, 'zero', "Zero (ms)")
+      
+      setCal(mesesARRAY);
+
+      function setCal(ver) {
+        let days;
+        let firstDayOfCalendar = zero;
+        let firstDayOfMonth = firstDayOfCalendar;
+        let firstDay = 1;
+
+        ver.forEach((monthName, m) => {
+          // Recupera el número de días del mes a imprimir
+          days = monthDays[m];
+          console.log("days: ", days);
+
+          // Dibuja el mes
+          drawCal(firstDay, days, firstDayOfMonth, monthName, year);
+
+          firstDayOfMonth = addDay(firstDayOfMonth, days);
+          console.log("firstDayOfMonth: ", firstDayOfMonth);
+        });
+      }
+
+      function drawCal(firstDay, lastDate, date, monthName, year) {
+        // constant table settings
+        var headerHeight = 50; // height of the table's header cell
+        var border = 2; // 3D height of table's border
+        var cellspacing = 4; // width of table's border
+        var headerColor = "midnightblue"; // color of table's header
+        var headerSize = "+3"; // size of tables header font
+        var colWidth = 60; // width of columns in table
+        var dayCellHeight = 25; // height of cells containing days of the week
+        var dayColor = "darkblue"; // color of font representing week days
+        var cellHeight = 40; // height of cells representing dates in the calendar
+        var todayColor = "red"; // color specifying today's date in the calendar
+        var timeColor = "purple"; // color of font representing current time
+
+        // create basic table structure
+        var text = ""; // initialize accumulative variable to empty string
+        text += "<CENTER>";
+        text += "<TABLE BORDER=" + border + " CELLSPACING=" + cellspacing + ">"; // table settings
+        text += "<TH COLSPAN=" + diasXsemana + " HEIGHT=" + headerHeight + ">"; // create table header cell
+        text += '<FONT COLOR="' + headerColor + '" SIZE=' + headerSize + ">"; // set font for table header
+        text += monthName + " " + year;
+        text += "</FONT>"; // close table header's font settings
+        text += "</TH>"; // close header cell
+
+        // variables to hold constant settings
+        var openCol =
+          "<TD WIDTH=" + colWidth + " HEIGHT=" + dayCellHeight + ">";
+        openCol += '<FONT COLOR="' + dayColor + '">';
+        var closeCol = "</FONT></TD>";
+
+        // create first row of table to set column width and specify week day
+        text += '<TR ALIGN="center" VALIGN="center">';
+        for (var dayNum = 0; dayNum < diasXsemana; ++dayNum) {
+          text += openCol + weekDay[dayNum] + closeCol;
+        }
+
+        text += "</TR>";
+
+        // varibles de control y seguimiento del mes
+        let currentDay = 1;
+        let currentCell = 1; // Creo que ya no se usa
+
+        // Por cada semana del mes...
+        for (
+          var row = 1;
+          row <= Math.ceil((lastDate + firstDay - 1) / diasXsemana);
+          ++row
+        ) {
+          text += '<TR ALIGN="right" VALIGN="top">';
+
+          // Días de la semana
+          for (var col = 1; col <= diasXsemana; ++col) {
+            // Finaliza la impresión de días
+            if (currentDay > lastDate) break;
+
+            let dateArray = msToDateTime(date);
+
+           let claseLuna;
+            claseLuna = fullMoonArray.includes(dateArray[0])
+              ? "llena"
+              : newMoonArray.includes(dateArray[0])
+              ? "newMoon"
+              : "normal";
+
+            // Imprime las celdas de cada día
+            text += `<TD HEIGHT=${cellHeight} class="dia dia-${col} ${claseLuna}">
+                            ${currentDay}
+                            <span class="tooltiptext">
+                                ${dateArray[0]}
+                            </span>                                                           
+                        </TD>`;
+            if (currentDay <= lastDate) date = addDay(date, 1);
+            currentDay++;
+            console.log({currentDay, date})
+            //}
+          }
+          text += "</TR>";
+        }
+
+        // close all basic table tags
+        text += "</TABLE>";
+        text += "</CENTER>";
+
+        // JOSEA
+        // Imprime el resultado en el elemento 'id=mes'
+        const mes = document.getElementById("mes");
+        mes.innerHTML += text;
+      }
+    </script>
+    <p align="center">
+      <font face="arial" size="-2">This free script provided by</font><br />
+      <font face="arial, helvetica" size="-2"
+        ><a href="http://javascriptkit.com">JavaScript Kit</a></font
+      >
+    </p>
+  </body>
+</html> º

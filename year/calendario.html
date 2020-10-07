@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .dia-1 {
+        background-color: yellow;
+      }
+      .dia-5 {
+        background-color: yellowgreen;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="albor"></div>
+    <div id="zero"></div>
+    <div id="test"></div>
+    <div id="mes"></div>
+    <script>
+      /** JOSEA
+       * Opciones de personalización
+       * */
+      // Nuevo Calendario Secular
+      const addDay = (x, n) => {
+        n = n != "" ? n : 1;
+        return new Date(x.getTime() + 1000 * 60 * 60 * 24 * n);
+      };
+      const nextDay = (d) => {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+      };
+      // Última luna nueva 2019 antes del equinocio
+      // 26/11/2019 15:07:41
+      // fuente: https://canaltrece.com.co/noticias/facebook-messenger-instagram-whatsapp-novedades/
+      // 2020: https://www.calendario-365.es/luna/lunar-fases.html
+
+      const albor = new Date("2019-11-26T15:07:41.000Z");
+      const albor_ms = albor.getTime();
+      const zero = nextDay(albor);
+      const alborTexto = `Albor: ${albor_ms}<br>${albor.toLocaleString(
+        "es-ES"
+      )}`;
+      const alborEl = document.querySelector("#albor");
+      alborEl.innerHTML = alborTexto;
+
+      const NCS = new Map([
+        [
+          0,
+          {
+            start: {
+              ms: zero.getTime(),
+              NE: zero.toJSON(),
+            },
+            newMoons: [
+              "2019-12-26T05:15:31.000Z", // jueves, 26 de diciembre 00:15:31 a.m -> Colombia
+              "2020-01-24T22:44:11.000Z", // https://www.calendario-365.es/luna/lunar-fases.html
+              "2020-02-23T16:33:44.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+              "2020-01-24T22:44:11.000Z",
+            ],
+          },
+        ],
+      ]);
+
+      console.log(NCS.get(0));
+      const zeroNCS = NCS.get(0);
+      const zeroTexto = `Zero: ${zeroNCS.start.NE}`;
+      const zeroEl = document.querySelector("#zero");
+      zeroEl.innerHTML = zeroTexto;
+
+      // create array of abbreviated day names
+      const weekDay = [];
+      weekDay[0] = "Luna";
+      weekDay[1] = "Marte";
+      weekDay[2] = "Venus";
+      weekDay[3] = "Júpiter";
+      weekDay[4] = "Sol";
+
+      const diasXsemana = weekDay.length;
+
+      //let meses = new Array(13);
+      const mesesARRAY = [
+        "Capricornio",
+        "Acuario",
+        "Piscis",
+        "Aries",
+        "Tauro",
+        "Géminis",
+        "Cáncer",
+        "Leo",
+        "Virgo",
+        "Libra",
+        "Escorpio",
+        "Sagitario",
+        "Andrómeda",
+      ];
+
+      const monthDays = mesesARRAY.map((x, i) => {
+          return i % 2 === 0 ? 30 : 29;
+        });
+        monthDays[13] = 365 - 354
+
+      // Fecha actual:
+      const hoy = new Date();
+
+      const añoActual = hoy.getYear();
+      const mes = hoy.getMonth();
+      const mesActual = mesesARRAY[mes];
+
+      const hoyms = hoy.getTime();
+      const milisegundos = `<div>Milisegundos hoy: ${hoyms}</div>`;
+      const test = document.querySelector("#test");
+      test.innerHTML = milisegundos;
+
+      /*Copyright 1996 - Tomer and Yehuda Shiran
+        Feel free to "steal" this code provided that you leave this notice as is.
+        Additional examples from the book can be found at http://www.geocities.com/SiliconValley/9000/
+        For more information contact Tomer or Yehuda Shiran <yshiran@iil.intel.com>*/
+
+      setCal(mesesARRAY);
+
+      function getTime() {
+        //Recupera la hora actual para mostrarla en la fecha del día actual
+        var now = new Date();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        now = null;
+        var ampm = "";
+
+        // validate hour values and set value of ampm
+        if (hour >= 12) {
+          hour -= 12;
+          ampm = "PM";
+        } else ampm = "AM";
+        hour = hour == 0 ? 12 : hour;
+
+        // add zero digit to a one digit minute
+        if (minute < 10) minute = "0" + minute; // do not parse this number!
+
+        // return time string
+        return hour + ":" + minute + " " + ampm;
+      }
+
+      function getDays(month, year) {
+        // Crea un Array con el número de días de cada mes.
+        // PENDIENTE
+        // Calcular la fecha de la última Luna Nueva, para finalizar el año en esa fecha
+        /** Array.map()
+         * nueva versión con Array.map()
+         */
+        ar = mesesARRAY.map((x, i) => {
+          return i % 2 === 0 ? 30 : 29;
+        });
+        /*
+        var ar = new Array(13);
+        for (let i = 0; i <= 11; i++) {
+          i % 2 === 0 ? (ar[i] = 30) : (ar[i] = 29);
+        }
+        */
+        // Completa los días que faltan hasta el año nuevo,
+        // pero debería ser hasta la siguiente luna nueva
+        ar[12] = 365 - 354;
+
+        return ar[month];
+      }
+
+
+      function setCal(ver) {
+        let days
+        let year = 2019
+        let date = zero;
+        let firstDay = 1
+        ver.forEach((monthName, m) => {
+          /** Crea variables: year, month, monthName y date */
+          /*
+          var now = new Date();
+          var year = now.getYear();
+          if (year < 1000) year += 1900;
+          let month = m; // JOSEA; Modificación temporal para mostrar un mes determinado
+          var monthName = mes;
+          var date = now.getDate();
+          now = null;
+
+          // create instance of first day of month, and extract the day on which it occurs
+          var firstDayInstance = new Date(year, month, 1);
+          var firstDay = firstDayInstance.getDay();
+          firstDayInstance = null;
+
+          // Recupera el número de días del mes a imprimir
+          var days = getDays(month, year);
+*/ 
+          // Recupera el número de días del mes a imprimir
+          days = monthDays[m];
+          console.log('days: ', days)
+
+          // call function to draw calendar
+          drawCal(firstDay, days, date, monthName, year);
+
+          date = addDay(date, days);
+
+          console.log(date);
+        });
+      }
+
+      function drawCal(firstDay, lastDate, date, monthName, year) {
+        // constant table settings
+        var headerHeight = 50; // height of the table's header cell
+        var border = 2; // 3D height of table's border
+        var cellspacing = 4; // width of table's border
+        var headerColor = "midnightblue"; // color of table's header
+        var headerSize = "+3"; // size of tables header font
+        var colWidth = 60; // width of columns in table
+        var dayCellHeight = 25; // height of cells containing days of the week
+        var dayColor = "darkblue"; // color of font representing week days
+        var cellHeight = 40; // height of cells representing dates in the calendar
+        var todayColor = "red"; // color specifying today's date in the calendar
+        var timeColor = "purple"; // color of font representing current time
+
+        // create basic table structure
+        var text = ""; // initialize accumulative variable to empty string
+        text += "<CENTER>";
+        text += "<TABLE BORDER=" + border + " CELLSPACING=" + cellspacing + ">"; // table settings
+        text += "<TH COLSPAN=" + diasXsemana + " HEIGHT=" + headerHeight + ">"; // create table header cell
+        text += '<FONT COLOR="' + headerColor + '" SIZE=' + headerSize + ">"; // set font for table header
+        text += monthName + " " + year;
+        text += "</FONT>"; // close table header's font settings
+        text += "</TH>"; // close header cell
+
+        // variables to hold constant settings
+        var openCol =
+          "<TD WIDTH=" + colWidth + " HEIGHT=" + dayCellHeight + ">";
+        openCol += '<FONT COLOR="' + dayColor + '">';
+        var closeCol = "</FONT></TD>";
+
+        // create first row of table to set column width and specify week day
+        text += '<TR ALIGN="center" VALIGN="center">';
+        for (var dayNum = 0; dayNum < diasXsemana; ++dayNum) {
+          // JOSEA
+          text += openCol + weekDay[dayNum] + closeCol;
+        }
+
+        text += "</TR>";
+
+        // declaration and initialization of two variables to help with tables
+        var digit = 1;
+        var curCell = 1;
+
+        for (
+          var row = 1;
+          row <= Math.ceil((lastDate + firstDay - 1) / diasXsemana); // JOSEA: Determina el num. de semanas
+          ++row
+        ) {
+          text += '<TR ALIGN="right" VALIGN="top">';
+          for (var col = 1; col <= diasXsemana; ++col) {
+            // Finaliza la impresión de días
+            if (digit > lastDate) break;
+            /** JOSEA
+             *  Crea espacios en blanco en los primeros días del mes si no empieza en lunes.
+             *  Con el nuevo calendario no es necesario porque todos los meses empiezan en lunes...
+            if (curCell < firstDay) {
+              text += "<TD></TD>";
+              curCell++;
+            } else {
+              */
+            // Imprime la hora en el día actual
+
+            if (digit == date && mesActual == monthName) {
+              // current cell represent today's date
+              text += "<TD HEIGHT=" + cellHeight + ">";
+              text += '<FONT COLOR="' + todayColor + '">';
+              text += digit;
+              text += "</FONT><BR>";
+              text += '<FONT COLOR="' + timeColor + '" SIZE=2>';
+              text += "<CENTER>Hoy: " + getTime() + "</CENTER>"; // JOSEA
+              text += "</FONT>";
+              text += "</TD>";
+            }
+            // Imprime las celdas de cada día
+            else
+              text += `<TD HEIGHT=${cellHeight} class=dia-${col}>${digit}</TD>`;
+            digit++;
+            //}
+          }
+          text += "</TR>";
+        }
+
+        // close all basic table tags
+        text += "</TABLE>";
+        text += "</CENTER>";
+
+        // JOSEA
+        // Imprime el resultado en el elemento 'id=mes'
+        const mes = document.getElementById("mes");
+        mes.innerHTML += text;
+      }
+    </script>
+    <p align="center">
+      <font face="arial" size="-2">This free script provided by</font><br />
+      <font face="arial, helvetica" size="-2"
+        ><a href="http://javascriptkit.com">JavaScript Kit</a></font
+      >
+    </p>
+  </body>
+</html>
